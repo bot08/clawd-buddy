@@ -1,0 +1,6 @@
+{
+  "name": "clawd-buddy",
+  "description": "Clawd, animated above the Claude Code prompt",
+  "owner": { "name": "Oleh Shcherba" },
+  "plugins": [{ "name": "clawd-buddy", "source": "./" }]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "clawd-buddy",
+  "version": "0.1.0",
+  "description": "Animated Clawd above the prompt that reacts to what Claude is doing",
+  "author": { "name": "Oleh Shcherba" },
+  "types": "./types/index.d.ts"
+}
