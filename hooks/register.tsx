@@ -433,7 +433,7 @@ export const register: Register = on => {
   })
 
   on('ui.render', { component: 'Spinner' }, ($, e, next) => {
-    if (isOff) {
+    if (isOff || e.surface !== 'terminal') {
       return next(e)
     }
     spin = { word: e.props.message ?? e.props.word, suffix: e.props.suffix }
@@ -444,7 +444,7 @@ export const register: Register = on => {
 
   // Every turn's closing line is hidden; the latest one's word is kept for beside Clawd.
   on('ui.render', { component: 'TurnDuration' }, ($, e, next) => {
-    if (isOff) {
+    if (isOff || e.surface !== 'terminal') {
       return next(e)
     }
     if (done !== null && e.props.durationMs === done.durationMs) {
@@ -497,7 +497,8 @@ export const register: Register = on => {
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    if (isOff || e.props.hasSurvey) {
+    // Clawd lives in the terminal; the desktop app and IDEs keep their own look.
+    if (isOff || e.surface !== 'terminal' || e.props.hasSurvey) {
       return next(e)
     }
 

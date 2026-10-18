@@ -5,9 +5,10 @@ const BAND = {
   component: 'AbovePrompt',
   props: { hasSurvey: false, isWorking: true, maxRows: 10, bodyColumns: 80 } as unknown as RenderPropsOf['AbovePrompt'],
 } as const
-const SURFACES = ['terminal', 'desktop'] as const
+// Clawd is drawn in the terminal alone.
+const SURFACES = ['terminal'] as const
 
-test('Clawd stands above the prompt on every surface', async $ => {
+test('Clawd stands above the prompt in the terminal', async $ => {
   for (const surface of SURFACES) {
     const ui = await $.ui.mount({ plugin: 'clawd-buddy', surface, ...BAND })
     expect(await ui.find({ key: 'clawd' })).toBeDefined()
@@ -81,4 +82,26 @@ test('/clawd off hides Clawd and /clawd on brings him back', async ($, on) => {
     expect(await ui.find({ key: 'clawd' })).toBeDefined()
     await ui.unmount()
   }
+})
+
+test('the desktop app keeps its own band and spinner', async ($, on) => {
+  // Stand for the engine's own drawings beneath the plugin.
+  on('ui.render', { component: 'AbovePrompt' }, ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>engine band</Text>
+  })
+  on('ui.render', { component: 'Spinner' }, ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>engine spinner</Text>
+  })
+  const band = await $.ui.mount({ plugin: 'clawd-buddy', surface: 'desktop', ...BAND })
+  expect(await band.find({ key: 'clawd' })).toBeUndefined()
+  expect(await band.find({ type: 'Text', text: /engine band/ })).toBeDefined()
+  const spin = await $.ui.mount({
+    plugin: 'clawd-buddy',
+    surface: 'desktop',
+    component: 'Spinner',
+    props: { word: 'Pondering', message: null, suffix: '…', mode: 'thinking' },
+  })
+  expect(await spin.find({ type: 'Text', text: /engine spinner/ })).toBeDefined()
 })

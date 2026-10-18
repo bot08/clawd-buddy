@@ -80,8 +80,8 @@ them twice, turn Claude Code's off in `~/.claude/settings.json`:
   fall a little behind.
 - Hiding the turn-duration line hides it in older messages of the transcript
   too.
-- Clicking needs a surface that draws a `Client` (the terminal and the desktop
-  app); elsewhere Clawd is drawn without clicks.
+- Clawd lives in the terminal only. The desktop app and IDE extensions read the
+  same plugin settings but keep their own look: the mod draws nothing there.
 
 ## Layout
 
